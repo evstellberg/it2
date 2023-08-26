@@ -19,12 +19,13 @@ class Ball:
   
   def tegn(self):
     """Metode for å tegne ballen"""
-    pg.draw.rect(self.vindusobjekt, (255, 69, 0), (self.x, self.y)) 
+    pg.draw.rect(self.vindusobjekt, (255, 255, 255), (self.x, self.y, 40, 40)) 
 
   def flytt(self):
     """Metode for å flytte ballen"""
     # Sjekker om ballen er utenfor høyre/venstre kant
-    
+    if ((self.x) <= 0) or ((self.x + 40) >= self.vindusobjekt.get_width()):
+      self.fart = -self.fart
     # Flytter ballen
     self.x += self.fart
 
