@@ -3,6 +3,9 @@ import keyboard
 
 pg.init()
 
+FPS = 69
+fpsClock = pg.time.Clock()
+
 VINDU_BREDDE = 220
 VINDU_HOYDE = 160
 vindu = pg.display.set_mode([VINDU_BREDDE, VINDU_HOYDE])
@@ -38,10 +41,10 @@ class Strek:
 
             self.x += self.fart
 
-strekVertHvit = Strek(60, 0, 0.01, vindu, 255, 255, 255, 40, 160)
-strekVertBlo = Strek(70, 0, 0.01, vindu, 0, 32, 91, 20, 160)
-strekHorHvit = Strek(0, 60, 0.01, vindu, 255, 255, 255, 220, 40)
-strekHorBlo = Strek(0, 70, 0.01, vindu, 0, 32, 91, 220, 20)
+strekVertHvit = Strek(60, 0, 2.01, vindu, 255, 255, 255, 40, 160)
+strekVertBlo = Strek(70, 0, 2.01, vindu, 0, 32, 91, 20, 160)
+strekHorHvit = Strek(0, 60, 2.01, vindu, 255, 255, 255, 220, 40)
+strekHorBlo = Strek(0, 70, 2.01, vindu, 0, 32, 91, 220, 20)
 
 while fortsett:
     
@@ -62,45 +65,51 @@ while fortsett:
     """def on_press(key):
         print("hei")"""
     
+    if keyboard.is_pressed("Space"):
+        keyboard.wait("a")
+        steg += 1
+
     if steg == 0:
+        
+        strekVertHvitx = strekVertHvit.x
         strekVertHvit.tegn()
         strekVertHvit.flytt()
         
-        strekVertHvitx = strekVertHvit.x
+        
     if steg == 1:
         pg.draw.rect(vindu, (255, 255, 255), (strekVertHvitx, 0, 40, 160))
-
+        print(strekVertHvitx)
+        
+        strekVertBlox = strekVertBlo.x
         strekVertBlo.tegn()
         strekVertBlo.flytt()
 
-        strekVertBlox = strekVertBlo.x
+
     if steg == 2:
         pg.draw.rect(vindu, (255, 255, 255), (strekVertHvitx, 0, 40, 160))
         pg.draw.rect(vindu, (0, 32, 91), (strekVertBlox, 0, 20, 160))
         
+        strekHorHvity = strekHorHvit.y
         strekHorHvit.tegn()
         strekHorHvit.flytt()
 
-        strekHorHvity = strekHorHvit.y
+        
     if steg == 3:
         pg.draw.rect(vindu, (255, 255, 255), (strekVertHvitx, 0, 40, 160))
         pg.draw.rect(vindu, (255, 255, 255), (0, strekHorHvity, 220, 40))
-        pg.draw.rect(vindu, (0, 32, 91), (strekVertBlox, 0, 20, 160))
+        pg.draw.rect(vindu, (0, 32, 91), (strekVertBlox , 0, 20, 160))
         
-        
-        strekHorBlo.tegn()
-        strekHorBlo.flytt()
-
         strekHorBloy = strekHorBlo.y
+        strekHorBlo.tegn()
+        strekHorBlo.flytt() 
+
+        
 
     
     if steg == 4:
         poeng = abs(60 - strekVertHvitx) + abs(70 - strekVertBlox) + abs(60 - strekHorHvity) + abs(70 - strekHorBloy)
         print(f"Du var {poeng} piksler fra et perfekt flagg!")
 
-    if keyboard.is_pressed("Space"):
-        steg += 1
-        keyboard.wait("a")
 
     #print(strekVertHvit.x)
 
@@ -109,3 +118,4 @@ while fortsett:
     #pg.draw.rect(vindu, (0, 32, 91), (70, 0, 20, 160))
     #pg.draw.rect(vindu, (0, 32, 91), (0, 70, 220, 20))
     pg.display.flip()
+    fpsClock.tick_busy_loop(FPS)
