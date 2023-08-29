@@ -1,11 +1,13 @@
 import pygame as pg
 import keyboard
+import time
+import random
 
 pg.init()
 
-FPS = 69
+FPS = 60
 fpsClock = pg.time.Clock()
-
+ 
 VINDU_BREDDE = 220
 VINDU_HOYDE = 160
 vindu = pg.display.set_mode([VINDU_BREDDE, VINDU_HOYDE])
@@ -41,10 +43,10 @@ class Strek:
 
             self.x += self.fart
 
-strekVertHvit = Strek(60, 0, 2.01, vindu, 255, 255, 255, 40, 160)
-strekVertBlo = Strek(70, 0, 2.01, vindu, 0, 32, 91, 20, 160)
-strekHorHvit = Strek(0, 60, 2.01, vindu, 255, 255, 255, 220, 40)
-strekHorBlo = Strek(0, 70, 2.01, vindu, 0, 32, 91, 220, 20)
+strekVertHvit = Strek(random.randint(41, 199), 0, 2.01, vindu, 255, 255, 255, 40, 160)
+strekVertBlo = Strek(random.randint(41, 199), 0, 2.01, vindu, 0, 32, 91, 20, 160)
+strekHorHvit = Strek(0, random.randint(41, 119), 2.01, vindu, 255, 255, 255, 220, 40)
+strekHorBlo = Strek(0, random.randint(41, 119), 2.01, vindu, 0, 32, 91, 220, 20)
 
 while fortsett:
     
@@ -66,7 +68,7 @@ while fortsett:
         print("hei")"""
     
     if keyboard.is_pressed("Space"):
-        keyboard.wait("a")
+        time.sleep(0.4)
         steg += 1
 
     if steg == 0:
