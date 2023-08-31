@@ -20,6 +20,13 @@ ticks = 0
 
 timing = [0,0,0,0,0,0,0]
 
+def brikke(steg):
+    if keyboard.is_pressed("Space"):
+        timing[steg] = (60 + steg * 30) - ticks
+        if timing[steg] < 2 and timing[steg] > -2:
+            window.fill((255, 255, 255))
+
+
 class gameObject:
     def __init__(self, x, y, speed, windowObject, red, green, blue, width, height):
         self.x = x
@@ -57,41 +64,35 @@ while fortsett:
     if ticks < 65:
         test.draw()
         test.move()
-    if keyboard.is_pressed("Space"):
-        timing[0] = 60 - ticks
+        brikke(0)
     if ticks > 30 and ticks < 95:
         test2.draw()
         test2.move()
-        if keyboard.is_pressed("Space"):
-            timing[1] = 90 - ticks
+        brikke(1)
     if ticks > 60 and ticks < 125:
         test3.draw()
         test3.move()
-        if keyboard.is_pressed("Space"):
-            timing[2] = 120 - ticks
+        brikke(2)
     if ticks > 90 and ticks < 155:
         test4.draw()
         test4.move()
-        if keyboard.is_pressed("Space"):
-            timing[3] = 150 - ticks
+        brikke(3)
     if ticks > 120 and ticks < 185:
         test5.draw()
         test5.move()
-        if keyboard.is_pressed("Space"):
-            timing[4] = 180 - ticks
+        brikke(4)
     if ticks > 150 and ticks < 215:
         test6.draw()
         test6.move()
-        if keyboard.is_pressed("Space"):
-            timing[5] = 210 - ticks
+        brikke(5)
     if ticks > 180 and ticks < 245:
         test7.draw()
         test7.move()
-        if keyboard.is_pressed("Space"):
-            timing[6] = 240 - ticks
+        brikke(6)
     if ticks > 245:
         print(timing[0] + timing[1] + timing[2] + timing[3] + timing[4] + timing[5] + timing[6])
         print(timing)
     pg.display.flip()
     fpsClock.tick_busy_loop(FPS)
     ticks += 1
+
