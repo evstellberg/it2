@@ -1,3 +1,0 @@
-STEIN = 1
-SAKS = 2
-PAPIR = 4

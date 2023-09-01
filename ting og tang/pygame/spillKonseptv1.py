@@ -18,14 +18,14 @@ FPS = 60
 fpsClock = pg.time.Clock()
 ticks = 0
 
-timing = [0,0,0,0,0,0,0]
+timing = [0,0,0,0,0,0,0] 
+
 
 def brikke(steg):
-    if keyboard.is_pressed("Space"):
-        timing[steg] = (60 + steg * 30) - ticks
-        if timing[steg] < 2 and timing[steg] > -2:
-            window.fill((255, 255, 255))
-
+        if keyboard.is_pressed("Space"):
+            timing[steg] = (60 + steg * 30) - ticks
+            if timing[steg] <= 2 and timing[steg] >= -2:
+                window.fill((255, 255, 255))
 
 class gameObject:
     def __init__(self, x, y, speed, windowObject, red, green, blue, width, height):
