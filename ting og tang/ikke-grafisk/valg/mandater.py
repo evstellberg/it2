@@ -5,9 +5,19 @@ for i in range(0, len(partier)):
         stemmer = stemmer/1.4
         partier[i]["stemmer"] = stemmer
 
+
+
 for i in range(1, 67):
     for j in range(0, len(partier)):
         stemmer = partier[j]["stemmer"]
         mandater = partier[j]["mandater"]
         stemmer = stemmer/((2*mandater)+1)
         print(stemmer)
+
+def sammenligning():
+    vinner = ""
+    vinnerVerdi = 0
+    for i in range(0, len(partier)):
+        parti = partier[i]["partinavn"]
+        partiVerdi = partier[i]
+        
