@@ -52,82 +52,46 @@ class Spiller:
         self.nummer = nummer
         self.penger = penger
         self.posisjon = posisjon
+    
+    eiendom = []
+
+    def terningkasting(self):
+        terningkast = random.randint(1,6)
+        self.posisjon += terningkast
+        if self.posisjon > tiles:
+            self.posisjon = self.posisjon - tiles
+        plass = eiendommer[self.posisjon]
+        print(f'Du har landet på {plass["navn"]}')  
+        if plass["eier"] == "ingen":
+            if self.penger > plass["pris"]:
+                x = input(f'Vil du kjøpe eiendommen? Den koster {plass["pris"]} penger. Du har {self.penger} penger.\ny/n\n')
+                if x == "y":
+                    self.penger = self.penger - plass["pris"]
+                    plass["eier"] = self.nummer
+                    self.eiendom.append(plass["plassering"])
+            elif self.penger < plass["pris"]:
+                print("Du har ikke råd til denne eiendommen")
+                input("heieheiei")
+        #if plass["eier"] == "spiller2":
+            #spiller2.penger += plass["grunnleie"]
+            #spiller1.penger = spiller1.penger - plass["grunnleie"]
+            #print("Du betalte leie til den andre spilleren!")
+    def spillerRunde(self):
+        loop = True
+        while loop == True:
+            x = input(f"Spiller {self.nummer} sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nGi opp[2] \nTrille terning[3]\n")
+            if x == "1":
+                print("Kommer snart!")
+                y = input("Hva vil du gjøre? \nGå tilbake [1]")
+            if x == "2":
+                exit()
+            if x == "3":
+                loop = False
+                self.terningkasting()
 
 spiller1 = Spiller(1, 10000, -1)
 spiller2 = Spiller(2, 10000, -1)
 
-
-def terningkastingSpiller1():
-    terningkast = random.randint(1,6)
-    spiller1.posisjon += terningkast
-    if spiller1.posisjon > tiles:
-        spiller1.posisjon = spiller1.posisjon - tiles
-    plass = eiendommer[spiller1.posisjon]
-    print(f'Du har landet på {plass["navn"]}')  
-    if plass["eier"] == "ingen":
-        if spiller1.penger > plass["pris"]:
-            x = input(f'Vil du kjøpe eiendommen? Den koster {plass["pris"]} penger. Du har {spiller1.penger} penger.\ny/n\n')
-            if x == "y":
-                spiller1.penger = spiller1.penger - plass["pris"]
-                plass["eier"] = "spiller1"
-                spiller1Eiendom.append(plass["plassering"])
-        elif spiller1.penger < plass["pris"]:
-            print("Du har ikke råd til denne eiendommen")
-            input("heieheiei")
-    if plass["eier"] == "spiller2":
-        spiller2.penger += plass["grunnleie"]
-        spiller1.penger = spiller1.penger - plass["grunnleie"]
-        print("Du betalte leie til den andre spilleren!")
-
-def terningkastingSpiller2():
-    terningkast = random.randint(1,6)
-    spiller2.posisjon += terningkast
-    if spiller2.posisjon > tiles:
-        spiller2.posisjon = spiller2.posisjon - tiles
-    plass = eiendommer[spiller2.posisjon]
-    print(f'Du har landet på {plass["navn"]}')  
-    if plass["eier"] == "ingen":
-        if spiller2.penger > plass["pris"]:
-            x = input(f'Vil du kjøpe eiendommen? Den koster {plass["pris"]} penger. Du har {spiller2.penger} penger.\ny/n\n')
-            if x == "y":
-                spiller2.penger = spiller2.penger - plass["pris"]
-                plass["eier"] = "spiller1"
-                spiller2Eiendom.append(plass["plassering"])
-        elif spiller2.penger < plass["pris"]:
-            print("Du har ikke råd til denne eiendommen")
-            input("heieheiei")
-    if plass["eier"] == "spiller1":
-        spiller1.penger += plass["grunnleie"]
-        spiller2.penger = spiller2.penger - plass["grunnleie"]
-        print("Du betalte leie til den andre spilleren!")
-
-
-def spiller1Runde():
-    loop = True
-    while loop == True:
-        x = input("Spiller 1 sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nGi opp[2] \nTrille terning[3]\n")
-        if x == "1":
-            print("Kommer snart!")
-            y = input("Hva vil du gjøre? \nGå tilbake [1]")
-        if x == "2":
-            exit()
-        if x == "3":
-            loop = False
-            terningkastingSpiller1()
-
-def spiller2Runde():
-    loop = True
-    while loop == True:
-        x = input("Spiller 2 sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nGi opp[2] \nTrille terning[3]\n")
-        if x == "1":
-            print("Kommer snart!")
-            y = input("Hva vil du gjøre? \nGå tilbake [1]")
-        if x == "2":
-            exit()
-        if x == "3":
-            loop = False
-            terningkastingSpiller2()
-
 while True:
-    spiller1Runde()
-    spiller2Runde()
+    spiller1.spillerRunde()
+    spiller2.spillerRunde()
