@@ -69,6 +69,7 @@ class Spiller:
                     self.penger = self.penger - plass["pris"]
                     plass["eier"] = self.nummer
                     self.eiendom.append(plass["plassering"])
+                    print(self.eiendom)
             elif self.penger < plass["pris"]:
                 print("Du har ikke råd til denne eiendommen")
                 input("heieheiei")
