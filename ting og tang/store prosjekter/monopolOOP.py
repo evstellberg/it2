@@ -104,23 +104,35 @@ class Spiller:
     
 
     def spillerRunde(self):
+        #global mulighet3
+        #global trilletTerning
+        mulighet3 = "Trille terning"
+        trilletTerning = False
         loop = True
         while loop == True:
-            x = input(f"Spiller {self.nummer} sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nGi opp[2] \nTrille terning[3]\n")
+            x = input(f"Spiller {self.nummer} sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nGi opp[2] \n{mulighet3}[3]\n")
             if x == "1":
                 print("Kommer snart!")
                 y = input("Hva vil du gjøre? \nGå tilbake [1]")
             if x == "2":
                 exit()
             if x == "3":
-                loop = False
-                self.terningkasting()
+                if trilletTerning == False:
+                    self.terningkasting()
+                    trilletTerning = True
+                    mulighet3 = "Avslutt runden"
+                else:
+                    loop = False
 
 spiller1 = Spiller(1, 10000, -1)
 spiller2 = Spiller(2, 10000, -1)
 spillbrett = Spillbrett(1)
 
 x = "1"
+#trilletTerning = False
+#mulighet3 = "Trille terning"
+
+#mulighet3 = "Trille terning"
 
 while True:
     spillbrett.rundeBestemmelse()
