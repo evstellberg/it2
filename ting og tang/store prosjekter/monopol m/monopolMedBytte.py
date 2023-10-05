@@ -65,7 +65,7 @@ class Spillbrett:
             spiller1.forslag()
             #spiller2.motForslag()
             #spiller1.aksept()
-    
+
     def leiebetaling(self):
         if self.runde == 1:
             spiller2.penger += spillbrett.eiendommer[spiller1.posisjon]["grunnleie"]
@@ -114,7 +114,7 @@ class Spiller:
         print("Her er dine eiendommer: ")
         i = 0
         for i in range(len(self.eiendom)):
-            print(spillbrett.eiendommer[self.eiendom[i]]["navn"])
+            print("heyyy")
 
     #def motForslag(self):
 
@@ -122,35 +122,23 @@ class Spiller:
 
 
     def spillerRunde(self):
-        #global mulighet3
-        #global trilletTerning
-        mulighet3 = "Trille terning"
-        trilletTerning = False
         loop = True
         while loop == True:
-            x = input(f"Spiller {self.nummer} sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nByttehandel[2] \n{mulighet3}[3]\n")
+            x = input(f"Spiller {self.nummer} sin tur. \nHva vil du gjøre? \nSe eiendommer[1] \nByttehandel[2] \nTrille terning[3]\n")
             if x == "1":
-                self.seEiendommer()
+                print("Kommer snart!")
                 y = input("Hva vil du gjøre? \nGå tilbake [1]")
             if x == "2":
                 spillbrett.byttehandel()
             if x == "3":
-                if trilletTerning == False:
-                    self.terningkasting()
-                    trilletTerning = True
-                    mulighet3 = "Avslutt runden"
-                else:
-                    loop = False
+                loop = False
+                self.terningkasting()
 
 spiller1 = Spiller(1, 10000, -1)
 spiller2 = Spiller(2, 10000, -1)
 spillbrett = Spillbrett(1)
 
 x = "1"
-#trilletTerning = False
-#mulighet3 = "Trille terning"
-
-#mulighet3 = "Trille terning"
 
 while True:
     spillbrett.rundeBestemmelse()
