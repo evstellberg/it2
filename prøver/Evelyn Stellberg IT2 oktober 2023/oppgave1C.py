@@ -12,7 +12,7 @@ def maanedTilTekst1():
     global maaned
     if maaned == "01":
         maaned = "januar"
-    if maaned == "02":
+    elif maaned == "02":
         maaned = "februar"
     if maaned == "03":
         maaned = "mars"
@@ -35,8 +35,7 @@ def maanedTilTekst1():
     if maaned == "12":
         maaned = "desember"
 
-def maanedTilTekst2():
-    global maaned
+def maanedTilTekst2(maaned):
     maaneder = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"]
     if maaned[0] == 0:
         maaned = maaned[1]

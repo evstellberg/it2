@@ -1,3 +1,5 @@
+#Monopol med bruk av OOP. Byttehandel og spesielle felt er ikke implementert
+
 import random
 tiles = 27
 loop = True
