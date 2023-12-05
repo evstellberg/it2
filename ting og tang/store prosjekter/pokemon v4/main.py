@@ -29,13 +29,15 @@ class mainGame(object):
         self.width = 800
         self.height = 600
         self.smallfont = pygame.font.SysFont('Corbel',35)
-        self.navnfont = pygame.font.SysFont('Corbel', 12)
+        self.navnfont = pygame.font.SysFont('Corbel', 14)
 
         self.FPS = 30
         self.REFRESH = pygame.USEREVENT+1
         pygame.time.set_timer(self.REFRESH, 1000//self.FPS)    
 
         self.bg = pygame.image.load("ting og tang/store prosjekter/pokemon v4/grafikk/annen_grafikk/battlebackground.jpg")
+        self.playerImage = pygame.image.load(player.image)
+        self.enemyImage = pygame.image.load(enemy.image)
 
     def save_game(self, save_data, file_name):
         try:
@@ -84,20 +86,24 @@ class mainGame(object):
     def pauseButtons(self):
         if self.overlay == "pause":
             if self.musPåKnapp(185, 70) == True:
-                print("eyyy")
                 self.lagre()
                 self.save_game(self.savedData, "savedGame.pickle") #Kan legges til system for flere lagringsfiler senere
                 self.game_state = "loading"
             elif self.musPåKnapp(85, 70) == True:
                 self.savedData = self.load_game("savedGame.pickle")
                 self.overskriv()
-                print(self.savedData)
                 self.game_state = "loading"
         if self.overlay == "bag":
             if self.musPåKnapp(185, 70) == True:
-                actions.playerPotion()
+                actions.potion(player)
                 self.overlay = ""
                 self.fight_state = "enemy"
+        if self.overlay == "seier":
+            if self.musPåKnapp(-120, 70) == True:
+                player.setXp(player.getXp() + 250)
+                enemy.setCreature()
+                enemy.setLvl(player.getLvl())
+                self.overlay = ""
 
     def overskriv(self):
         player.setHp(self.savedData["spillerHp"])
@@ -106,12 +112,17 @@ class mainGame(object):
         player.setLvl(self.savedData["spillerLvl"])
         player.setAtck(self.savedData["spillerAtck"])
         player.setDfnc(self.savedData["spillerDfnc"])
+        player.setImg(self.savedData["spillerImg"])
         enemy.setHp(self.savedData["fiendeHp"])
         enemy.setMaxHp(self.savedData["fiendeMaxHp"])
         enemy.setNavn(self.savedData["fiendeNavn"])
         enemy.setLvl(self.savedData["fiendeLvl"])
         enemy.setAtck(self.savedData["fiendeAtck"])
         enemy.setDfnc(self.savedData["fiendeDfnc"])
+        enemy.setImg(self.savedData["fiendeImg"])
+        self.playerImage = pygame.image.load(player.image)
+        self.enemyImage = pygame.image.load(enemy.image)
+
 
     def lagre(self):
         self.savedData["spillerHp"] = player.getHp()
@@ -120,18 +131,21 @@ class mainGame(object):
         self.savedData["spillerLvl"] = player.getLvl()
         self.savedData["spillerAtck"] = player.getAtck()
         self.savedData["spillerDfnc"] = player.getDfnc()
-        self.savedData["fiendeHp"] = player.getHp()
-        self.savedData["fiendeMaxHp"] = player.getMaxHp()
-        self.savedData["fiendeNavn"] = player.getNavn()
-        self.savedData["fiendeLvl"] = player.getLvl()
-        self.savedData["fiendeAtck"] = player.getAtck()
-        self.savedData["fiendeDfnc"] = player.getDfnc()
+        self.savedData["spillerImg"] = player.image
+        self.savedData["fiendeHp"] = enemy.getHp()
+        self.savedData["fiendeMaxHp"] = enemy.getMaxHp()
+        self.savedData["fiendeNavn"] = enemy.getNavn()
+        self.savedData["fiendeLvl"] = enemy.getLvl()
+        self.savedData["fiendeAtck"] = enemy.getAtck()
+        self.savedData["fiendeDfnc"] = enemy.getDfnc()
+        self.savedData["fiendeImg"] = enemy.image
+
 
     def navnTekst(self, spiller, fiende):
-        spillertext = self.navnfont.render(spiller, True, self.color)
-        self.screen.blit(spillertext, (self.width/2-spillertext.get_rect()[2]/2,self.height/2-0))
-        fiendetext = self.navnfont.render(fiende, True, self.color)
-        self.screen.blit(fiendetext, (self.width/2-fiendetext.get_rect()[2]/2,self.height/2-0))
+        spillertext = self.navnfont.render(spiller, True, (0,0,0))
+        self.screen.blit(spillertext, (self.width/2-spillertext.get_rect()[2]/2 -350,self.height/2+130))
+        fiendetext = self.navnfont.render(fiende, True, (200,200,200))
+        self.screen.blit(fiendetext, (self.width/2-fiendetext.get_rect()[2]/2 + 350,self.height/2-270))
 
     def mainLoop(self):
         while True:
@@ -141,7 +155,7 @@ class mainGame(object):
                 for ev in pygame.event.get(): 
                         
                     if ev.type == pygame.QUIT: 
-                        pygame.quit() 
+                        pygame.quit()
 
                     if ev.type == pygame.MOUSEBUTTONDOWN: 
                         if self.musPåKnapp(20,70) == True:
@@ -205,12 +219,18 @@ class mainGame(object):
                 pygame.draw.rect(self.screen,(0,255,0),[self.width/2 - 380, self.height/2 + 150, playerHealthbar.getWidth(player.getMaxHp(), player.getHp())*3 + 1, 10])
                 pygame.draw.rect(self.screen,(255,0,0),[self.width/2 + 80, self.height/2 - 250, 300, 10])
                 pygame.draw.rect(self.screen,(0,255,0),[self.width/2 + 80, self.height/2 - 250, enemyHealthbar.getWidth(enemy.getMaxHp(), enemy.getHp())*3 + 1, 10])
-                self.navnTekst("navn1", "navn2")
+                self.navnTekst(player.getNavn(), enemy.getNavn())
+
+                self.screen.blit(self.playerImage, (100, 325))
+                self.screen.blit(self.enemyImage, (575, 225))
                 
                 self.mouse = pygame.mouse.get_pos()
                 
                 #KAMP-MENY
                 if self.fight_state == "meny":
+                    if player.isFainted() == True:
+                        self.overlay = "tap"
+                    
                     for ev in pygame.event.get():
                         if ev.type == pygame.QUIT: 
                             pygame.quit() 
@@ -237,6 +257,8 @@ class mainGame(object):
                 
                 #KAMP-ANGREP
                 elif self.fight_state == "attack":
+                    
+                    
                     for ev in pygame.event.get():
                         if ev.type == pygame.QUIT: 
                             pygame.quit() 
@@ -244,10 +266,10 @@ class mainGame(object):
                             if self.musPåKnapp(-220, -220) == True:
                                 self.fight_state = "meny"
                             if self.musPåKnapp(-200, 350) == True:
-                                actions.playerTackle()
+                                actions.tackle(enemy, player)
                                 self.fight_state = "enemy"
                             if self.musPåKnapp(-245, 350) == True:
-                                actions.playerHardTackle()
+                                actions.hardTackle(enemy, player)
                                 self.fight_state = "enemy"
 
                             self.pauseButtons()
@@ -265,6 +287,10 @@ class mainGame(object):
 
                 #KAMP-FIENDE
                 elif self.fight_state == "enemy":
+                    if enemy.isFainted() == True:
+                        self.fight_state = "meny"
+                        self.overlay = "seier"
+                    
                     for ev in pygame.event.get():
                         if ev.type == pygame.QUIT: 
                             pygame.quit() 
@@ -286,7 +312,8 @@ class mainGame(object):
                     if self.continueFight == 400:
                         self.continueFight = 0
                         self.loading = 0
-                        actions.enemyTackle()
+                        actions.tackle(player, enemy)
+
                         self.fight_state = "meny"
                 if self.overlay == "bag":
                     for ev in pygame.event.get():
@@ -302,15 +329,30 @@ class mainGame(object):
                     self.knapp(185, 70, "SAVE")
                     self.knapp(85, 70, "LOAD")
 
+                if self.overlay == "seier":
+                    self.gjennomsiktig(self.screen, (0, 0, 0, 200), (0, 0, 800, 600))
+                    self.dimm()
+                    self.tekst(195, "VICTORY!")
+                    self.tekst(0, f"You are now {player.getLvl()} Lvl")
+                    self.knapp(-120, 70, "CONTINUE")
+
+                if self.overlay == "tap":
+                    self.gjennomsiktig(self.screen, (0, 0, 0, 200), (0, 0, 800, 600))
+                    self.dimm()
+                    self.tekst(195, "LOSS")
+                    self.knapp(-120, 70, "RESTART")
+
+
             pygame.display.update() 
 
 #creaturegenerator
 class creatureGeneratorClass:
     def __init__(self):
         self.hp = [0, 10, 20]
-        self.navn = ["monster1", "monster2", "monster3"]
-        self.atck = [5, 10, 15]
-        self.dfnc = [1, 2, 3]
+        self.navn = ["Jo Bjørnar", "Katt", "Vildkatten"]
+        self.image = ["ting og tang/store prosjekter/pokemon v4/grafikk/creatures/joBjornar.jpg", "ting og tang/store prosjekter/pokemon v4/grafikk/creatures/katt.jpg", "ting og tang/store prosjekter/pokemon v4/grafikk/creatures/vildkatten.jpeg"]
+        self.atck = [5, 10, 15] 
+        self.dfnc = [1, 2, 3] 
 
     def generateHp(self):
         return random.choice(self.hp)
@@ -330,19 +372,20 @@ class creatureGeneratorClass:
     
 #Datalagring
 class creature:
-    def __init__(self, number):
+    def __init__(self):
         self.hp = 100
         self.maxHp = 100
-        self.navn = ""
+        self.navn = "e"
         self.lvl = 1
         self.atck = 20
         self.dfnc = 0
+        self.image = "e"
 
     def getHp(self):
-        return self.hp
+        return self.hp + 10*self.getLvl()
     
     def getMaxHp(self):
-        return self.maxHp
+        return self.maxHp + 10*self.getLvl()
 
     def getNavn(self):
         return self.navn
@@ -351,10 +394,10 @@ class creature:
         return self.lvl
     
     def getAtck(self):
-        return self.atck
+        return self.atck + 9*self.getLvl()
     
     def getDfnc(self):
-        return self.dfnc
+        return self.dfnc + 0.01*self.getLvl()
         
     def setHp(self, updatedHp):
         self.hp = updatedHp
@@ -376,18 +419,43 @@ class creature:
     def setDfnc(self, updatedDfnc):
         self.dfnc = updatedDfnc
 
+    def setImg(self, updatedImg):
+        self.image = updatedImg
+
     def setCreature(self):
         creatureStats = generator.getCreature()
-        print(creatureStats)
         self.setMaxHp(creatureStats[0])
         self.setHp(creatureStats[0])
         self.setNavn(creatureStats[1])
         self.setAtck(creatureStats[2])
         self.setDfnc(creatureStats[3])
+        self.setImg(generator.image[generator.navn.index(self.getNavn())])
 
-    def fainted(self):
+
+    def isFainted(self):
         if self.hp <= 0:
             return True
+
+class playerCreature(creature):
+    def __init__(self):
+        super().__init__()
+        self.xp = 0
+
+    def getXp(self):
+        return self.xp
+    
+    def setXp(self, updatedXp):
+        self.xp = updatedXp
+        self.levelUp()
+
+    def levelUp(self):
+        while self.getXp() >= 100:
+            self.setXp(self.getXp() - 100 * (1 + (0.1*self.getLvl())))
+            self.setLvl(self.getLvl() + 1)
+            print(self.getLvl())
+        
+
+
 
 #moveset
 class creatureActions:
@@ -396,29 +464,19 @@ class creatureActions:
 
     #Moves
 
-    def playerTackle(self):
+    def tackle(self, enemy, player):
         enemy.setHp(enemy.getHp() - player.getAtck())
-        print(enemy.hp)
-    
-    def enemyTackle(self):
-        player.setHp(player.getHp() - enemy.getAtck())
-        print(player.hp)
+        
 
-    def playerHardTackle(self):
+    def hardTackle(self, enemy, player):
         enemy.setHp(enemy.getHp() - player.getAtck()*1.5)
-        print(enemy.hp)
+        
     
-    def enemyHardTackle(self):
-        player.setHp(player.getHp() - enemy.getAtck()*1.5)
-        print(player.hp)
-    
-    def playerPotion(self):
+    def potion(self, player):
         player.setHp(player.getHp() + 60)
-        print(player.hp)
+        
 
-    def enemyPotion(self):
-        enemy.setHp(enemy.getHp() + 60)
-        print(enemy.hp)
+    
 
 class healthbar:
     def __init__(self):
@@ -436,9 +494,9 @@ class healthbar:
 
 
 #objekter
-player = creature(1)
+player = playerCreature()
 playerHealthbar = healthbar()
-enemy = creature(2)
+enemy = creature()
 enemyHealthbar = healthbar()
 generator = creatureGeneratorClass()
 actions = creatureActions()
