@@ -1,4 +1,4 @@
-import random
+import random # bibliotek for tilfeldigheter
 import pygame as pg
 import keyboard
 
